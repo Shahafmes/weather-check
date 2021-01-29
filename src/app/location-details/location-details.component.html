@@ -1,0 +1,37 @@
+<h2 class="text-center">Weather Check</h2>
+
+<form class="container" [formGroup]="weatherForm">
+  <div formArrayName="locations">
+    <div class="row justify-content-center"
+         *ngFor="let location of weatherForm.get('locations')['controls']; let i = index"
+         [formGroupName]="i">
+
+
+      <mat-form-field class="col-4">
+        <mat-label>City</mat-label>
+        <mat-select formControlName="city" required>
+          <mat-option *ngFor="let city of cities" [value]="city">
+            {{city}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="location.hasError('required',['city'])">Please choose city</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-4">
+        <mat-label>Unit</mat-label>
+        <mat-select formControlName="unit" required>
+          <mat-option *ngFor="let label of keys(unitsLabels)" [value]="label">
+            {{unitsLabels[label]}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="location.hasError('required',['unit'])">Please choose units</mat-error>
+      </mat-form-field>
+
+      <div class="add-location-btn" (click)="addLocationFormGroup()">
+        <fa-icon icon="plus" size="lg"></fa-icon>
+      </div>
+    </div>
+  </div>
+</form>
+
+

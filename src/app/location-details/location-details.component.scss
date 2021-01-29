@@ -1,0 +1,17 @@
+@import '~src/assets/variables';
+
+:host {
+  .container{
+    overflow-y: scroll;
+    height: 50vh;
+    max-height: 50vh;
+  }
+  .add-location-btn{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+
+
+}
