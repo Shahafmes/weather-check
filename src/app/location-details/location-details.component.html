@@ -9,19 +9,18 @@
 
       <mat-form-field class="col-4">
         <mat-label>City</mat-label>
-        <mat-select formControlName="city" required>
-          <mat-option *ngFor="let city of cities" [value]="city">
-            {{city}}
-          </mat-option>
+        <mat-select formControlName="city" required (infiniteScroll)="getNextBatch()" [complete]="offset === cities.length" msInfiniteScroll>
+          <mat-option *ngFor="let option of options$ | async " [value]="option.key">{{option.value}}</mat-option>
         </mat-select>
+
         <mat-error *ngIf="location.hasError('required',['city'])">Please choose city</mat-error>
       </mat-form-field>
 
       <mat-form-field class="col-4">
         <mat-label>Unit</mat-label>
         <mat-select formControlName="unit" required>
-          <mat-option *ngFor="let label of keys(unitsLabels)" [value]="label">
-            {{unitsLabels[label]}}
+          <mat-option *ngFor="let label of keys(unitsLabels)" [value]="unitsLabels[label]">
+            {{label}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="location.hasError('required',['unit'])">Please choose units</mat-error>
@@ -30,8 +29,15 @@
       <div class="add-location-btn" (click)="addLocationFormGroup()">
         <fa-icon icon="plus" size="lg"></fa-icon>
       </div>
+      <div class="col-12 d-flex justify-content-around" style="height: 100px">
+        <span class="d-flex align-items-center">{{(citiesDetails | async)[i]?.cityName }} </span>
+        <span class="d-flex align-items-center">{{(citiesDetails | async)[i]?.temperature }}</span>
+        <span class="d-flex align-items-center" *ngIf="(citiesDetails | async)[i]?.cityName">;</span>
+        <img *ngIf="(citiesDetails | async)[i]?.cityName" src='{{ "http://openweathermap.org/img/wn/" + (citiesDetails | async)[i]?.weatherIcon + "@2x.png"}}' />
+      </div>
     </div>
   </div>
 </form>
+
 
 
