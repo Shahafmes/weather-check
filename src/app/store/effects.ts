@@ -1,28 +1,37 @@
-import {Injectable} from '@angular/core';
-import {map, mergeMap, tap} from 'rxjs/operators';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {ApiService} from '../services/api.service';
-import {getLocation, setLocation} from './actions';
+import {Injectable} from '@angular/core';
+import {WeatherLocationService} from '../services/weather-location.service';
+import * as LocationActions from '../store/actions';
+import {City} from './reducers';
+import {catchError, concatMap, map} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 
 @Injectable()
 export class WeatherLocationEffects {
-
-  getlocations$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(getLocation.type),
-      mergeMap(({ id, units }) =>
-        this.apiService.getWeatherByLocation(id, units).pipe(
-          map(location => setLocation({ location }))
+    getLocationWeatherDetails$ = createEffect(() =>
+       this.actions$.pipe(
+          ofType(LocationActions.getLocationWeatherDetails.type),
+          concatMap(({ city, unit }) =>
+            this.weatherLocationService.getWeatherByLocation({city, unit}).pipe(
+                map((res: any) => {
+                  const city: City = {
+                    cityName: res?.name,
+                    id: res?.id,
+                    weatherDesc: res?.weather[0]?.description,
+                    weatherIcon: res?.weather[0]?.icon,
+                    temperature: res?.main?.temp,
+                  };
+                  return LocationActions.getLocationWeatherDetailsSuccess({ city });
+                }),
+                catchError(error => of(LocationActions.getLocationWeatherDetailsFailed({ error })))
+            )
+          )
         )
-      )
-    )
-  );
+    );
 
-  constructor(
-    private actions$: Actions,
-    private apiService: ApiService,
-  ) {}
+  constructor(private actions$: Actions, private weatherLocationService: WeatherLocationService) {}
+
 }
 
 

@@ -1,24 +1,88 @@
-import {ILocationsWeatherState, ILocationWeather} from './interface';
-import {createReducer, createSelector, on} from '@ngrx/store';
-import {setLocation} from './actions';
+import {Action, createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
+
+import * as LocationActions from '../store/actions';
 
 
-export const initialState: ILocationsWeatherState = {
-  locationsWeather: []
-};
+export interface State {
+  cities: WeatherLocationState;
+}
 
-export const setWeatherLocationReducer = createReducer(
-  initialState,
-  on(setLocation, (state, { location }) => ({ ...state, location: { ...location } }))
+export interface WeatherLocationState {
+  isLoading: boolean;
+  error: string;
+  cities: City[];
+}
+
+export interface City {
+  id: number;
+  cityName: string;
+  weatherDesc?: string;
+  weatherIcon?: string;
+  temperature?: number;
+}
+
+const initialState: WeatherLocationState = {
+  isLoading: false,
+  error: '',
+  cities: []
+}
+
+
+// Selector functions
+const getWeatherLocationState = createFeatureSelector<WeatherLocationState>('cities');
+
+export const getIsLoading = createSelector(
+  getWeatherLocationState,
+  state => state.isLoading
+);
+
+export const getError = createSelector(
+  getWeatherLocationState,
+  state => state.error
+);
+
+export const getCities = createSelector(
+  getWeatherLocationState,
+  state => state.cities
 );
 
 
-export const locationSelector = (state: ILocationsWeatherState) => state.locationsWeather;
+const weatherLocationReducer = createReducer<WeatherLocationState>(
+  initialState,
+  on(LocationActions.setIsLoadingToOff, (state): WeatherLocationState => {
+    return {
+      ...state,
+      isLoading: false
+    };
+  }),
+  on(LocationActions.setIsLoadingToOn, (state): WeatherLocationState => {
+    return {
+      ...state,
+      isLoading: true
+    };
+  }),
+  on(LocationActions.getlocations, (state): WeatherLocationState => {
+    return {
+      ...state,
+      cities: state?.cities,
+      error: ''
+    };
+  }),
+  on(LocationActions.getLocationWeatherDetailsFailed, (state, action): WeatherLocationState => {
+    return {
+      ...state,
+      error: action.error
+    };
+  }),
+  on(LocationActions.getLocationWeatherDetailsSuccess, (state, action): WeatherLocationState => {
+    return {
+      ...state,
+      cities: [...state.cities, action.city],
+      error: ''
+    };
+  }),
+);
 
-// export const setLocation = createSelector<ILocationsWeatherState>(
-//   locationSelector,
-//   (state: UsersState) => state.users
-
-
-
-// TODO: set empy location as initial value
+export function reducer(state: WeatherLocationState, action: Action) {
+  return weatherLocationReducer(state, action);
+}
