@@ -25,7 +25,7 @@ const initialState: WeatherLocationState = {
   isLoading: false,
   error: '',
   cities: []
-}
+};
 
 
 // Selector functions
@@ -73,6 +73,13 @@ const weatherLocationReducer = createReducer<WeatherLocationState>(
       ...state,
       error: action.error,
       isLoading: false
+    };
+  }),
+  on(LocationActions.getLocationWeatherDetails, (state, action): WeatherLocationState => {
+    return {
+      ...state,
+      error: '',
+      isLoading: true
     };
   }),
   on(LocationActions.getLocationWeatherDetailsSuccess, (state, action): WeatherLocationState => {

@@ -29,6 +29,7 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
 
   destroyed$ = new Subject<boolean>();
   errorMessage$: Observable<string>;
+  isLoading$: Observable<boolean>;
 
   constructor(private formBuilder: FormBuilder,
               private action$: Actions,
@@ -48,6 +49,7 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
 
     this.citiesDetails$ = this.store.select(fromReducer.getCities) as Observable<City[]>;
     this.errorMessage$ = this.store.select(fromReducer.getError) as Observable<string>;
+    this.isLoading$ = this.store.select(fromReducer.getIsLoading) as Observable<boolean>;
 
     this.action$.pipe(
       ofType(WeatherActions.getLocationWeatherDetailsSuccess),

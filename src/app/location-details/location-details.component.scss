@@ -1,6 +1,9 @@
 @import '~src/assets/variables';
 
 :host {
+  .header{
+    justify-content: center;
+  }
   .container{
     overflow-y: scroll;
     height: 48vh;
@@ -10,6 +13,12 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+  }
+  .spinner{
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 
