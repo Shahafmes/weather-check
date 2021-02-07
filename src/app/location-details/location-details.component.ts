@@ -28,6 +28,7 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
   options$: Observable<string[]>;
 
   destroyed$ = new Subject<boolean>();
+  errorMessage$: Observable<string>;
 
   constructor(private formBuilder: FormBuilder,
               private action$: Actions,
@@ -46,6 +47,7 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
     this.initialLocationForm();
 
     this.citiesDetails$ = this.store.select(fromReducer.getCities) as Observable<City[]>;
+    this.errorMessage$ = this.store.select(fromReducer.getError) as Observable<string>;
 
     this.action$.pipe(
       ofType(WeatherActions.getLocationWeatherDetailsSuccess),

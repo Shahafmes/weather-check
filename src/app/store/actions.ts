@@ -16,8 +16,6 @@ export enum LocationsWeatherTypesNames {
 
 export const getlocations = createAction(LocationsWeatherTypesNames.GET_LOCATIONS);
 
-export const setLocation = createAction(LocationsWeatherTypesNames.SET_LOCATION, props<{ city: City }>());
-
 export const getLocationWeatherDetails = createAction(LocationsWeatherTypesNames.GET_LOCATION, props<{ city: string, unit: MeasurementUnitsEnum.MeasurementUnits }>());
 
 export const getLocationWeatherDetailsSuccess = createAction(LocationsWeatherTypesNames.SET_LOCATION_SUCCESS, props<{ city: City }>());
