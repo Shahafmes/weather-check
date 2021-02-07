@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import Cities from '../JSON/city.list.min.json';
 
@@ -11,15 +12,15 @@ export class WeatherLocationService {
   constructor(private http: HttpClient) { }
   private cityListMap = new Map<string, number>();
 
-  getWeatherByLocation(location){
+  getWeatherByLocation(location): Observable<any>{
     return this.http.get(`https://api.openweathermap.org/data/2.5/weather?id=${location.city}&units=${location.unit}&appid=${environment.openweathermapAPIKey}`);
   }
 
-  citiesList(){
+  citiesList(): void{
     Cities.forEach( city => this.cityListMap.set( city.id, city.name));
   }
 
-  getCityListMap(){
+  getCityListMap(): Map<string, number>{
     return this.cityListMap;
   }
 }

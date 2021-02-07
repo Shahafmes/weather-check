@@ -71,14 +71,16 @@ const weatherLocationReducer = createReducer<WeatherLocationState>(
   on(LocationActions.getLocationWeatherDetailsFailed, (state, action): WeatherLocationState => {
     return {
       ...state,
-      error: action.error
+      error: action.error,
+      isLoading: false
     };
   }),
   on(LocationActions.getLocationWeatherDetailsSuccess, (state, action): WeatherLocationState => {
     return {
       ...state,
       cities: [...state.cities, action.city],
-      error: ''
+      error: '',
+      isLoading: false
     };
   }),
 );

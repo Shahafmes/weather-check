@@ -42,20 +42,8 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // get cities list from json file
-    this.apiService.citiesList();
-    const citiesMap = this.apiService.getCityListMap();
-
-    for (let [key, value] of citiesMap) {
-      this.cities.push({
-        key: key,
-        value: value}
-      )
-    }
-    this.getNextBatch();
-    this.weatherForm = this.formBuilder.group({
-      locations: this.formBuilder.array([this.createLocationWeatherFormGroup()])
-    });
+    this.getCitiesListFromJsonFile();
+    this.initialLocationForm();
 
     this.citiesDetails$ = this.store.select(fromReducer.getCities) as Observable<City[]>;
 
@@ -67,15 +55,34 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
 
-  getNextBatch() {
+  private getCitiesListFromJsonFile(): void {
+    this.apiService.citiesList();
+    const citiesMap = this.apiService.getCityListMap();
+
+    for (const [key, value] of citiesMap) {
+      this.cities.push({
+        key,
+        value}
+      );
+    }
+    this.getNextBatch();
+  }
+
+  getNextBatch(): void {
     const result = this.cities.slice(this.offset, this.offset + this.limit);
     this.options.next(result);
     this.offset += this.limit;
+  }
+
+  private initialLocationForm(): void {
+    this.weatherForm = this.formBuilder.group({
+      locations: this.formBuilder.array([this.createLocationWeatherFormGroup()])
+    });
   }
 
   public addLocationFormGroup(index: number): void {
@@ -87,7 +94,7 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(WeatherActions.getLocationWeatherDetails({city: lastWeatherLocation.city, unit: lastWeatherLocation.unit}));
   }
 
-  private addNewLocationInput(){
+  private addNewLocationInput(): void{
     const locations = this.weatherForm.get('locations') as FormArray;
     locations.push(this.createLocationWeatherFormGroup());
   }
@@ -98,4 +105,5 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
       unit: new FormControl('')
     });
   }
+
 }
