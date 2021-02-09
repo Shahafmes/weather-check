@@ -19,12 +19,14 @@ import { environment } from '../environments/environment';
 import { reducer } from './store/reducers';
 import { WeatherLocationEffects } from './store/effects';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
+import { LocationWeatherDetailsComponent } from './location-details/location-weather-details/location-weather-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LocationListComponent,
     LocationDetailsComponent,
+    LocationWeatherDetailsComponent,
   ],
   imports: [
     BrowserModule,
