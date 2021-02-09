@@ -1,6 +1,5 @@
 <div class="col-12 d-flex justify-content-around" style="height: 100px">
-  <span class="d-flex align-items-center">{{city?.cityName }} </span>
-  <span class="d-flex align-items-center">{{city?.temperature }}</span>
-  <span class="d-flex align-items-center" *ngIf="city?.cityName">;</span>
+  <span class="d-flex align-items-center col-2">{{city?.cityName }} </span>
+  <span class="d-flex align-items-center col-2" *ngIf="city?.temperature">{{city?.temperature }} ;  </span>
   <img *ngIf="city?.cityName" src='{{ "http://openweathermap.org/img/wn/" + city?.weatherIcon + "@2x.png"}}' />
 </div>
