@@ -9,8 +9,14 @@ import Cities from '../JSON/city.list.min.json';
 })
 export class WeatherLocationService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.init();
+  }
   private cityListMap = new Map<string, number>();
+
+  private init(): void{
+    this.citiesList();
+  }
 
   getWeatherByLocation(location): Observable<any>{
     return this.http.get(`https://api.openweathermap.org/data/2.5/weather?id=${location.city}&units=${location.unit}&appid=${environment.openweathermapAPIKey}`);

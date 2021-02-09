@@ -65,7 +65,6 @@ export class LocationDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getCitiesListFromJsonFile(): void {
-    this.apiService.citiesList();
     const citiesMap = this.apiService.getCityListMap();
 
     for (const [key, value] of citiesMap) {
